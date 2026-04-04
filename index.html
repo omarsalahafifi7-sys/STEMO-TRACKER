@@ -6,8 +6,14 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <span class="page-bg side-left"> STEMO TRACKER</span>
-        <span class="page-bgS side-right"> STEMO TRACKER</span>
+        <div class="side-vibe-left">STEMO TRACKER</div>
+        <div class="side-vibe-right">STEMO TRACKER</div>
+        <nav class="quick-access-drawer">
+            <div class="drawer-links">
+                <a href="index.html" class="drawer-item">TRACKER</a>
+                <a href="about.html" class="drawer-item">ABOUT ME</a>
+            </div>
+        </nav>
         <div class="container">
             <span class="bg-text">STEMO TRACKER </span>
             <h1> STEMO TRACKER</h1>
@@ -22,5 +28,16 @@
 <img src="8485778d-3361-42a6-8fb8-f79a85f4cc56.jpg" alt="timer image" id="TRACKER-img">
 </div>
 <script src="script.js" defer></script>
+<audio id="btn-audio" src="click2.mp3"></audio>
+<script>
+    const clickSound = document.getElementById("btn-audio");
+    const allInteractiveElements = document.querySelectorAll("button, .drawer-item, header nav a, .about-nav a")
+    allInteractiveElements.forEach(element => {
+        element.addEventListener("click", () => {
+            clickSound.currentTime = 0;
+            clickSound.play();
+        })
+    });
+</script>
     </body>
-</html>
+</html> 
