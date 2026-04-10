@@ -1,42 +1,196 @@
 <!DOCTYPE html>
-<html lan="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="view port" content="width=device-width, intial-scale=2.0">
-        <title>ABOUR ME / STEMO TRACKER</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <nav class="main-nav">
-            <div class="nav-container">
-                <a href="index.html" class="nav-link">TRACKER</a>
-                <a href="about.html" class="nav-link active">ABOUT ME</a>
-            </div>
-        </nav>
-        <div class="container stem-profile-core"> <div class="profile-header-block">
-            <img src="me.jpg" alt="STEM STUDENT" class="personImage">
-            <h1>OMAR SALAH AFIFI</h1>
-            <p class="role-title">STEM Student and Developer</p>
-            </div>
-            <div class="porfile-info-block">
-                <h2>ABOUT ME</h2>
-                <p>I built STEMO TRACKER to help high stundets like me to manage thier time in the any search engine</p>
-            </div>
-            <div class="skills-showcase-block">
-                <h2>TECHNICAL sKILLS</h2>
-                <div class="skills-grid">
-                    <span class="skillItem">HTML5</span>
-                    <span class="skillItem">CSS3</span>
-                    <span class="skillItem">JavaScrip</span>
-                    <span class="skillItem">Problem solving</span>
-                    <span>STEM RESEARCH</span>
-                </div>
-            </div>
-        <div class="contact-info-block">
-            <h2>CONTANCT INFORMATION</h2>
-            <div class="contact-links">
-                <a href="omarsafifi4@gmail.com" class="contanct-links"> omarsafifi4@gmail.com</a>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me — STEMO TRACKER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0e0e0e;
+            color: #f0f0f0;
+            min-height: 100vh;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: #161616;
+            border-bottom: 1px solid #2a2a2a;
+            position: sticky;
+            top: 0;
+        }
+        nav .logo {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            color: #f59e0b;
+            letter-spacing: 3px;
+            margin-right: auto;
+        }
+        nav a {
+            color: #888;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 16px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+        nav a:hover { color: #f0f0f0; background: #252525; }
+        nav a.active { color: #0e0e0e; background: #f59e0b; }
+
+        .page { max-width: 620px; margin: 0 auto; padding: 40px 20px 80px; }
+
+        .card {
+            background: #161616;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .profile-top {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 32px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .profile-pic {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #2a2a2a;
+            flex-shrink: 0;
+        }
+        .profile-pic-placeholder {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+        .profile-name h1 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+        .profile-name .role {
+            font-size: 13px;
+            color: #f59e0b;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        .section { margin-bottom: 28px; }
+        .section-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #444;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .section p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #999;
+        }
+
+        .skills-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+        .skill {
+            padding: 6px 14px;
+            background: #0e0e0e;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #888;
+            transition: 0.2s;
+        }
+        .skill:hover { border-color: #f59e0b; color: #f59e0b; }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 10px 16px;
+            background: #0e0e0e;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .contact-link:hover { border-color: #f59e0b; color: #f59e0b; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <span class="logo">STEMO</span>
+    <a href="index.html">⏱ Tracker</a>
+    <a href="about.html" class="active"> About Me</a>
+</nav>
+
+<div class="page">
+    <div class="card">
+
+        <div class="profile-top">
+            <img src="WhatsApp Image 2026-04-02 at 2.37.11 AM.jpg" alt="Omar" class="profile-pic"
+                 onerror="this.style.display='none'; document.getElementById('picFallback').style.display='flex';">
+            <div class="profile-pic-placeholder" id="picFallback" style="display:none;"></div>
+            <div class="profile-name">
+                <h1>Omar Salah Afifi</h1>
+                <div class="role">STEM High School · 6th of October</div>
             </div>
         </div>
-    </body>
+
+        <div class="section">
+            <div class="section-label">About Me</div>
+            <p>
+                I'm a STEM high school student who likes coding and solving problems.
+                I built STEMO TRACKER to help myself and other students keep track of
+                how long we actually spend studying — because I kept losing track of time!
+            </p>
+        </div>
+
+        <div class="section">
+            <div class="section-label">Why I Built This</div>
+            <p>
+                Most timers I found online are too simple — they don't let you label what
+                you're studying or save your sessions. I wanted something that actually
+                helps you see where your study time is going, so I made my own.
+            </p>
+        </div>
+
+        <div class="section">
+            <div class="section-label">Skills</div>
+            <div class="skills-wrap">
+                <span class="skill">HTML5</span>
+                <span class="skill">CSS3</span>
+                <span class="skill">JavaScript</span>
+                <span class="skill">Problem Solving</span>
+                <span class="skill">STEM Research</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-label">Contact</div>
+            <a href="mailto:omarsafifi4@gmail.com" class="contact-link">
+                 omarsafifi4@gmail.com
+            </a>
+        </div>
+
+    </div>
+</div>
+
+</body>
 </html>
