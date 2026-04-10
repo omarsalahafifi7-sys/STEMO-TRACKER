@@ -1,43 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
- <meta charset="UTF-8">
-        <title>STEMO TRACKER</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div class="side-vibe-left">STEMO TRACKER</div>
-        <div class="side-vibe-right">STEMO TRACKER</div>
-        <nav class="quick-access-drawer">
-            <div class="drawer-links">
-                <a href="index.html" class="drawer-item">TRACKER</a>
-                <a href="about.html" class="drawer-item">ABOUT ME</a>
-            </div>
-        </nav>
-        <div class="container">
-            <span class="bg-text">STEMO TRACKER </span>
-            <h1> STEMO TRACKER</h1>
-            <h2 id="time">00:00:00</h2>
-            <div class="buttons">
-            <button id="startBtn">GO GO</button>
-            <button id="stopBtn">Stop</button>
-            <button id="resetBtn">ِAgain</button>
-            </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEMO TRACKER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0e0e0e;
+            color: #f0f0f0;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: #161616;
+            border-bottom: 1px solid #2a2a2a;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav .logo {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            color: #f59e0b;
+            letter-spacing: 3px;
+            margin-right: auto;
+        }
+        nav a {
+            color: #888;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 16px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+        nav a:hover { color: #f0f0f0; background: #252525; }
+        nav a.active { color: #0e0e0e; background: #f59e0b; }
+
+        .page { max-width: 620px; margin: 0 auto; padding: 40px 20px 80px; }
+
+        .card {
+            background: #161616;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 36px;
+            margin-bottom: 20px;
+        }
+        .card-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            color: #f59e0b;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .card h1 { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+        .card .desc { color: #555; font-size: 13px; margin-bottom: 28px; }
+
+        .field-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            background: #0e0e0e;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #f0f0f0;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            margin-bottom: 28px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus { border-color: #f59e0b; }
+        input[type="text"]::placeholder { color: #333; }
+
+        .timer-wrap {
+            background: #0e0e0e;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 28px 20px;
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .timer-wrap::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .is-running .timer-wrap::after { opacity: 1; animation: pulse 1.5s ease-in-out infinite; }
+        @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+        #timerDisplay {
+            font-family: 'Space Mono', monospace;
+            font-size: 58px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            line-height: 1;
+            color: #f0f0f0;
+            transition: color 0.3s;
+        }
+        .is-running #timerDisplay { color: #f59e0b; }
+
+        .timer-status {
+            font-size: 11px;
+            color: #333;
+            margin-top: 10px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .is-running .timer-status { color: #4ade80; }
+
+        .btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .btn {
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.15s;
+            letter-spacing: 0.3px;
+        }
+        .btn:hover  { filter: brightness(1.12); transform: translateY(-1px); }
+        .btn:active { transform: translateY(1px); filter: brightness(0.9); }
+
+        .btn-start { background: #22c55e; color: #0e0e0e; grid-column: span 2; font-size: 15px; padding: 16px; }
+        .btn-pause { background: #1e1e1e; color: #f0f0f0; border: 1px solid #333; }
+        .btn-reset { background: #1e1e1e; color: #f0f0f0; border: 1px solid #333; }
+        .btn-save  { background: #f59e0b; color: #0e0e0e; grid-column: span 2; }
+
+        /* LOG */
+        .log-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .log-header h2 { font-size: 16px; font-weight: 700; }
+
+        .btn-clear {
+            background: none;
+            border: 1px solid #2a2a2a;
+            color: #555;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s;
+        }
+        .btn-clear:hover { border-color: #e05050; color: #e05050; }
+
+        #sessionList {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 260px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+        #sessionList::-webkit-scrollbar { width: 3px; }
+        #sessionList::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+
+        #sessionList li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #0e0e0e;
+            border: 1px solid #222;
+            border-radius: 8px;
+            font-size: 13px;
+            animation: fadeUp 0.25s ease;
+        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+        .s-subject { font-weight: 600; margin-bottom: 2px; }
+        .s-meta    { color: #444; font-size: 11px; }
+        .s-time    { color: #f59e0b; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 13px; }
+        .empty-msg { color: #333; font-size: 13px; text-align: center; padding: 24px; }
+
+        .log-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 14px;
+            border-top: 1px solid #222;
+            font-size: 13px;
+            color: #555;
+        }
+        .log-footer strong { color: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <span class="logo">STEMO</span>
+    <a href="index.html" class="active">⏱ Tracker</a>
+    <a href="about.html"> About Me</a>
+</nav>
+
+<div class="page">
+    <div class="card" id="timerCard">
+        <div class="card-label">Study Timer</div>
+        <h1>STEMO TRACKER</h1>
+        <p class="desc">Track your study time, stay focused.</p>
+
+        <div class="field-label">What are you studying?</div>
+        <input type="text" id="subjectInput" placeholder="e.g. Physics, Math, Biology..." maxlength="40">
+
+        <div class="timer-wrap">
+            <div id="timerDisplay">00:00:00</div>
+            <div class="timer-status" id="timerStatus">READY</div>
         </div>
-<div class="image container">
-<img src="timer.jpg" alt="timer image" id="TRACKER-img">
+
+        <div class="btn-row">
+            <button id="startBtn" class="btn btn-start">▶ &nbsp;START</button>
+            <button id="stopBtn"  class="btn btn-pause">⏸ &nbsp;Pause</button>
+            <button id="resetBtn" class="btn btn-reset">↺ &nbsp;Reset</button>
+            <button id="saveBtn"  class="btn btn-save"> &nbsp;Save Session</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="log-header">
+            <h2> My Study Sessions</h2>
+            <button class="btn-clear" id="clearLog">Clear All</button>
+        </div>
+        <ul id="sessionList"></ul>
+        <div class="log-footer">
+            <span>Total today: <strong id="totalTime">0h 0m</strong></span>
+            <span id="sessionCount" style="font-size:12px;">0 sessions</span>
+        </div>
+    </div>
 </div>
-<script src="script.js" defer></script>
-<audio id="btn-audio" src="click2.mp3"></audio>
+
 <script>
-    const clickSound = document.getElementById("btn-audio");
-    const allInteractiveElements = document.querySelectorAll("button, .drawer-item, header nav a, .about-nav a")
-    allInteractiveElements.forEach(element => {
-        element.addEventListener("click", () => {
-            clickSound.currentTime = 0;
-            clickSound.play();
-        })
+let timePassed = 0, startTime = null, interval = null, running = false;
+let sessions = [];
+
+const display      = document.getElementById("timerDisplay");
+const statusEl     = document.getElementById("timerStatus");
+const card         = document.getElementById("timerCard");
+const sessionList  = document.getElementById("sessionList");
+const totalTimeEl  = document.getElementById("totalTime");
+const countEl      = document.getElementById("sessionCount");
+const subjectInput = document.getElementById("subjectInput");
+
+function pad(n) { return String(n).padStart(2, "0"); }
+
+function fmt(ms) {
+    let s = Math.floor(ms / 1000);
+    return pad(Math.floor(s/3600)) + ":" + pad(Math.floor((s%3600)/60)) + ":" + pad(s%60);
+}
+function shortFmt(ms) {
+    let s = Math.floor(ms / 1000);
+    let h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sc = s%60;
+    if (h > 0) return h + "h " + m + "m";
+    if (m > 0) return m + "m " + sc + "s";
+    return sc + "s";
+}
+
+function startTimer() {
+    if (running) return;
+    running = true;
+    startTime = Date.now() - timePassed;
+    interval = setInterval(() => { timePassed = Date.now() - startTime; display.textContent = fmt(timePassed); }, 500);
+    card.classList.add("is-running");
+    statusEl.textContent = "RUNNING";
+    document.getElementById("startBtn").textContent = "▶  RUNNING...";
+}
+function stopTimer() {
+    if (!running) return;
+    running = false;
+    clearInterval(interval); interval = null;
+    card.classList.remove("is-running");
+    statusEl.textContent = "PAUSED";
+    document.getElementById("startBtn").textContent = "▶  START";
+}
+function resetTimer() {
+    stopTimer(); timePassed = 0;
+    display.textContent = "00:00:00";
+    statusEl.textContent = "READY";
+}
+function saveSession() {
+    if (timePassed < 1000) { alert("Start the timer first!"); return; }
+    let subject = subjectInput.value.trim() || "General Study";
+    let now = new Date();
+    sessions.unshift({ subject, duration: timePassed, timeStr: shortFmt(timePassed), savedAt: pad(now.getHours())+":"+pad(now.getMinutes()) });
+    renderLog(); resetTimer(); subjectInput.value = "";
+}
+function renderLog() {
+    sessionList.innerHTML = "";
+    if (!sessions.length) {
+        sessionList.innerHTML = '<li class="empty-msg">No sessions yet — start studying!</li>';
+        totalTimeEl.textContent = "0h 0m"; countEl.textContent = "0 sessions"; return;
+    }
+    let totalMs = 0;
+    sessions.forEach(s => {
+        totalMs += s.duration;
+        let li = document.createElement("li");
+        li.innerHTML = `<span><div class="s-subject">${s.subject}</div><div class="s-meta">saved at ${s.savedAt}</div></span><span class="s-time">${s.timeStr}</span>`;
+        sessionList.appendChild(li);
     });
+    totalTimeEl.textContent = shortFmt(totalMs);
+    countEl.textContent = sessions.length + " session" + (sessions.length !== 1 ? "s" : "");
+}
+
+document.getElementById("startBtn").addEventListener("click", startTimer);
+document.getElementById("stopBtn") .addEventListener("click", stopTimer);
+document.getElementById("resetBtn").addEventListener("click", resetTimer);
+document.getElementById("saveBtn") .addEventListener("click", saveSession);
+document.getElementById("clearLog").addEventListener("click", () => { if (sessions.length && confirm("Clear all?")) { sessions=[]; renderLog(); }});
+
+renderLog();
 </script>
-    </body>
-</html> 
+</body>
+</html>
